@@ -1,0 +1,17 @@
+line.bot:
+  channel-token: ''
+  channel-secret: ''
+  # Webhook url setting
+  handler.path: /linebot/callback
+
+spring:
+  mvc:
+    converters:
+      preferred-json-mapper: gson
+  gson:
+    pretty-printing: true
+    date-format: yyyy-MM-dd HH:mm:ss
+
+
+logging.level:
+  com.linecorp.bot.client.wire: INFO

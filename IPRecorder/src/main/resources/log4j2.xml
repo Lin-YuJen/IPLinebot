@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+
+<!-- 此篇設定參考：https://blog.csdn.net/ClementAD/article/details/44625787 -->
+<!-- 策略可參考：https://www.cnblogs.com/yeyang/p/7944899.html -->
+
+<!-- monitorInterval 為多少秒重新讀設定 -->
+<!-- status為log4j內部事件的紀錄等級，僅自身有效 -->
+<!-- strict 為是否用 XML Schema 檢查配置 -->
+<!-- schema 為 schema 位置 -->
+<Configuration status="warn" monitorInterval="30"
+               strict="true" schema="Log4J-V2.14.xsd">
+
+    <!-- 屬性設定 -->
+    <Properties>
+<!--        <Property name="rootLevel" value="ERROR"/>-->
+        <Property name="rootLevel" value="INFO"/>
+        <Property name="logDirectrory">
+            /schedule/log/findIP
+        </Property>
+    </Properties>
+
+    <!-- LoggerConfig 設定 -->
+    <!-- 其中必須包含一個 root logger 跟多個一般 logger (選用) -->
+    <!-- Level 可以設為 TRACE、DEBUG、INFO、WARN、ERROR、ALL、OFF ，不設定則為 ERROR -->
+    <Loggers>
+
+        <!-- 全體設定，不用指定 name -->
+        <Root level="${rootLevel}">
+            <!-- 引用何種 Appender，詳細設定於Appenders中 -->
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Root>
+
+        <!-- 特定 package 或 class 要套用的級別設定，需要指定 name -->
+<!--        <Logger name="com.enix.action" level="INFO">-->
+<!--            <AppenderRef ref="RollingFile"/>-->
+<!--        </Logger>-->
+
+    </Loggers>
+
+    <!-- Appender 用以定義輸出位置 -->
+    <Appenders>
+        <!-- Console 設定 -->Void@
+        <Console name="Console" target="SYSTEM_OUT">
+            <!-- 特定級別的過濾規則 -->
+            <!-- 有三種狀態可選： Accept、Deny、Neutral -->
+            <!-- <ThresholdFilter level="INFO" onMatch="Neutral" onMismatch="Neutral"
+                /> -->
+            <!-- 輸出格式 -->
+            <PatternLayout
+                    pattern="%d{yyyy-MM-dd HH:mm:ss,SSS}:%4p %t (%F:%L) - %m%n"/>
+        </Console>
+
+        <!-- 輸出檔案設定 -->
+        <RollingFile name="RollingFile"
+                     fileName="${logDirectrory}/ipCheck.log"
+                     filePattern="${logDirectrory}/ipCheck-%d{yyyy-MM-dd}.log">
+            <!-- 輸出格式 -->
+            <PatternLayout
+                    pattern="%d{yyyy-MM-dd HH:mm:ss,SSS}:%-5p %t (%F:%L) - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <!-- 檔案達到設定上限則換新檔紀錄 -->
+                <SizeBasedTriggeringPolicy size="5 MB"/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+</Configuration>
